@@ -1,5 +1,8 @@
 <script>
+import MyButton from "@/components/UI/MyButton/MyButton.vue";
+
 export default {
+  components: {MyButton},
   props: {
     post: {
       type: Object,
@@ -11,8 +14,13 @@ export default {
 
 <template>
   <div class="post">
-    <div><strong>Назва: </strong>{{ post.title }}</div>
-    <div><strong>Опис: </strong>{{ post.body }}</div>
+    <div>
+      <div><strong>Назва: </strong>{{ post.title }}</div>
+      <div><strong>Опис: </strong>{{ post.body }}</div>
+    </div>
+    <div class="post__btn">
+      <my-button>Видалити</my-button>
+    </div>
   </div>
 </template>
 
