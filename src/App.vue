@@ -6,9 +6,11 @@
   import axios from "axios";
   import MySelect from "@/components/UI/MySelect/MySelect.vue";
   import MyInput from "@/components/UI/MyInput/MyInput.vue";
+  import MyPagination from "@/components/UI/MyPagination/MyPagination.vue";
 
   export default {
     components: {
+      MyPagination,
       MyInput,
       MySelect,
       MyButton,
@@ -22,6 +24,9 @@
         isPostLoading: false,
         selectedSort: '',
         searchQuery: '',
+        page: 1,
+        limit: 10,
+        totalPages: 0,
         sortOptions: [
           {value: "title", name: "По назві"},
           {value: "body", name: "По опису"},
@@ -40,10 +45,19 @@
       showDialog() {
         this.dialogVisible = true;
       },
+      changePage(pageNumber) {
+        this.page = pageNumber;
+      },
       async fetchPosts() {
         try {
           this.isPostLoading = true;
-          const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+          const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            }
+          });
+          this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
           this.posts = response.data;
         } catch (e) {
           alert('Error');
@@ -64,7 +78,9 @@
       }
     },
     watch: {
-
+      page() {
+        this.fetchPosts();
+      }
     },
   }
 </script>
@@ -90,6 +106,7 @@
         v-if="!isPostLoading"
     />
     <div v-else>Завантаження...</div>
+    <my-pagination :totalPages="totalPages" v-model="page" />
   </div>
 </template>
 
