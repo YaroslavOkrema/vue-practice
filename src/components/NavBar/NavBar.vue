@@ -1,21 +1,22 @@
-<script>
-import MyButton from "@/components/UI/MyButton/MyButton.vue";
-
-export default {
-  name: "NavBar",
-  components: {MyButton}
-}
-</script>
-
 <template>
   <div class="navbar">
     <div>Vue 3</div>
     <div class="navbar__btn">
       <my-button @click="$router.push('/posts')">Пости</my-button>
       <my-button @click="$router.push('/about')">Про сайт</my-button>
+      <my-button @click="$router.push('/store')">Store</my-button>
     </div>
   </div>
 </template>
+
+<script>
+import MyButton from "@/components/UI/MyButton/MyButton.vue";
+
+export default {
+  name: "NavBar",
+  components: { MyButton },
+};
+</script>
 
 <style scoped>
   .navbar {
