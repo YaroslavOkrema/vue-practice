@@ -3,6 +3,7 @@
   import PostForm from "@/components/PostForm/PostForm.vue";
   import MyDialog from "@/components/UI/MyDialog/MyDialog.vue";
   import MyButton from "@/components/UI/MyButton/MyButton.vue";
+  import axios from "axios";
 
   export default {
     components: {
@@ -12,13 +13,9 @@
     },
     data() {
       return {
-        posts: [
-          {id: 1, title: 'JavaScript', body: 'JavaScript топ'},
-          {id: 2, title: 'Python', body: 'Python топ'},
-          {id: 3, title: 'C++', body: 'C++ топ'},
-          {id: 4, title: 'React', body: 'React топ'},
-        ],
+        posts: [],
         dialogVisible: false,
+        isPostLoading: false,
       }
     },
 
@@ -32,7 +29,21 @@
       },
       showDialog() {
         this.dialogVisible = true;
+      },
+      async fetchPosts() {
+        try {
+          this.isPostLoading = true;
+          const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+          this.posts = response.data;
+        } catch (e) {
+          alert('Error');
+        } finally {
+          this.isPostLoading = false;
+        }
       }
+    },
+    mounted() {
+      this.fetchPosts();
     }
   }
 </script>
@@ -52,7 +63,9 @@
     <post-list
         :posts="posts"
         @remove="removePost"
+        v-if="!isPostLoading"
     />
+    <div v-else>Завантаження...</div>
   </div>
 </template>
 
