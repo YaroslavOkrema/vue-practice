@@ -20,6 +20,7 @@ export default {
       <div><strong>Опис: </strong>{{ post.body }}</div>
     </div>
     <div class="post__btn">
+      <my-button @click="$router.push(`/posts/${post.id}`)">Відкрити</my-button>
       <my-button @click="$emit('remove', post)">Видалити</my-button>
     </div>
   </div>

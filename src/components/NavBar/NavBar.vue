@@ -8,7 +8,7 @@ export default {
 </script>
 
 <template>
-  <div @click="$router.push('/')" class="navbar">
+  <div class="navbar">
     <div>Vue 3</div>
     <div class="navbar__btn">
       <my-button @click="$router.push('/posts')">Пости</my-button>
