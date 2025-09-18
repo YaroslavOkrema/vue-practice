@@ -83,18 +83,7 @@ export default {
   },
   mounted() {
     this.fetchPosts();
-    console.log(this.$refs.observer)
-    const options = {
-      rootMargin: '0px',
-      threshold: 1.0
-    }
-    const callback =  (entries) => {
-      if (entries[0].isIntersecting && this.page < this.totalPages) {
-        this.loadMorePosts()
-      }
-    }
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer);
+
   },
   computed: {
     sortedPosts() {
@@ -115,7 +104,7 @@ export default {
 <template>
   <div>
     <h1>Сторінка з постами</h1>
-    <my-input v-model="searchQuery" placeholder="Пошук..."/>
+    <my-input v-focus v-model="searchQuery" placeholder="Пошук..."/>
     <div class="app__btn">
       <my-button
           @click="showDialog"
@@ -134,7 +123,7 @@ export default {
     />
     <div v-else>Завантаження...</div>
     <!--    <my-pagination :totalPages="totalPages" v-model="page" />-->
-    <div ref="observer"></div>
+    <div v-intersection="loadMorePosts"></div>
   </div>
 </template>
 
