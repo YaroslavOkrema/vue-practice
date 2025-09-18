@@ -5,9 +5,11 @@
   import MyButton from "@/components/UI/MyButton/MyButton.vue";
   import axios from "axios";
   import MySelect from "@/components/UI/MySelect/MySelect.vue";
+  import MyInput from "@/components/UI/MyInput/MyInput.vue";
 
   export default {
     components: {
+      MyInput,
       MySelect,
       MyButton,
       MyDialog,
@@ -19,6 +21,7 @@
         dialogVisible: false,
         isPostLoading: false,
         selectedSort: '',
+        searchQuery: '',
         sortOptions: [
           {value: "title", name: "По назві"},
           {value: "body", name: "По опису"},
@@ -55,6 +58,9 @@
     computed: {
       sortedPosts() {
         return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]));
+      },
+      searchSortedPosts() {
+        return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
       }
     },
     watch: {
@@ -66,6 +72,7 @@
 <template>
   <div class="app">
     <h1>Сторінка з постами</h1>
+    <my-input v-model="searchQuery" placeholder="Пошук..."/>
     <div class="app__btn">
       <my-button
           @click="showDialog"
@@ -78,7 +85,7 @@
       <post-form @createPost = 'createPost'/>
     </my-dialog>
     <post-list
-        :posts="sortedPosts"
+        :posts="searchSortedPosts"
         @remove="removePost"
         v-if="!isPostLoading"
     />
