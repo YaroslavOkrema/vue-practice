@@ -19,7 +19,7 @@ export default {
       <div><strong>Опис: </strong>{{ post.body }}</div>
     </div>
     <div class="post__btn">
-      <my-button>Видалити</my-button>
+      <my-button @click="$emit('remove', post)">Видалити</my-button>
     </div>
   </div>
 </template>
