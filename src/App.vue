@@ -4,9 +4,11 @@
   import MyDialog from "@/components/UI/MyDialog/MyDialog.vue";
   import MyButton from "@/components/UI/MyButton/MyButton.vue";
   import axios from "axios";
+  import MySelect from "@/components/UI/MySelect/MySelect.vue";
 
   export default {
     components: {
+      MySelect,
       MyButton,
       MyDialog,
       PostList, PostForm,
@@ -16,6 +18,11 @@
         posts: [],
         dialogVisible: false,
         isPostLoading: false,
+        selectedSort: '',
+        sortOptions: [
+          {value: "title", name: "По назві"},
+          {value: "body", name: "По опису"},
+        ],
       }
     },
 
@@ -44,24 +51,34 @@
     },
     mounted() {
       this.fetchPosts();
-    }
+    },
+    computed: {
+      sortedPosts() {
+        return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]));
+      }
+    },
+    watch: {
+
+    },
   }
 </script>
 
 <template>
   <div class="app">
     <h1>Сторінка з постами</h1>
-    <my-button
-        @click="showDialog"
-        style="margin: 15px 0;"
-    >
-      Створити пост
-    </my-button>
+    <div class="app__btn">
+      <my-button
+          @click="showDialog"
+      >
+        Створити пост
+      </my-button>
+      <my-select v-model="selectedSort" :options="sortOptions" />
+    </div>
     <my-dialog v-model:show="dialogVisible">
       <post-form @createPost = 'createPost'/>
     </my-dialog>
     <post-list
-        :posts="posts"
+        :posts="sortedPosts"
         @remove="removePost"
         v-if="!isPostLoading"
     />
@@ -78,5 +95,11 @@
 
   .app {
     padding: 20px;
+  }
+
+  .app__btn {
+    margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
   }
 </style>
